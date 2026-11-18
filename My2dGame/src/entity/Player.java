@@ -17,7 +17,7 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
-	int hasKey = 0;
+	public int hasKey = 0;
 	
 	
 	
@@ -48,10 +48,12 @@ public class Player extends Entity{
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		speed = 4;
+		direction = "down";
 	}
 	
 	
 	public void getPlayerImage() {
+		
 		try {
 			
 			up1 = ImageIO.read(getClass().getResourceAsStream("/player/baby_up_1.png"));
@@ -139,13 +141,17 @@ public class Player extends Entity{
 				gp.playSE(1);
 				hasKey++;
 				gp.obj[i] = null;
-				System.out.println("Key:" + hasKey);
+				gp.ui.showMessage("You got a key!");
 				break;
 			case "Door":
 				if(hasKey > 0) {
 					gp.playSE(3);
 					gp.obj[i] = null;
 					hasKey--;
+					gp.ui.showMessage("You opened the door!");
+				}
+				else {
+					gp.ui.showMessage("You need a key!");
 				}
 				System.out.println("Key:" + hasKey);
 				break;
@@ -153,6 +159,12 @@ public class Player extends Entity{
 				gp.playSE(2);
 				speed += 1;
 				gp.obj[i] = null;
+				gp.ui.showMessage("You got the boots!");
+				break;
+			case "Chest":
+				gp.ui.gameFinished = true;
+				gp.stopMusic();
+				gp.playSE(4);
 				break;
 			}
 		}
